@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MerioApp</string>
+
+    <string name="sell">Ventas</string>
+    <string name="clients">Clientes</string>
+    <string name="products">Productos</string>
+</resources>
