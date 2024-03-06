@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.merioapp.GlobalVar
 import com.example.merioapp.model.Routes
 import com.example.merioapp.ui.domain.entity.Sell
 import com.example.merioapp.ui.theme.MerioAppTheme
@@ -64,6 +65,8 @@ fun HomeScreen(
     val sells = viewModel.sells.collectAsState(initial = emptyList())
 
     val totalProfit = getTotalPorfit(sells.value)
+
+    val isDolar = false
 
     val selected = remember {
         mutableStateOf(Icons.Default.Sell)
@@ -281,7 +284,16 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 Text(
-                                    text = "${it.profit_product} $", style = TextStyle(
+                                    text = "${
+                                        if (isDolar){
+                                            getConvertProfit(
+                                                it.profit_product,
+                                                GlobalVar.amountConvertion
+                                            )
+                                        }else {
+                                            it.profit_product
+                                        }
+                                    } $", style = TextStyle(
                                         color = Success_Color,
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold
@@ -323,6 +335,13 @@ fun getTotalPorfit(sell: List<Sell>): Float {
         totalProfit += sell.profit_product
     }
     return totalProfit
+}
+
+fun getConvertProfit(value: Float, float: Float): Float {
+
+    var convertedProfit = value * float
+    return convertedProfit
+
 }
 
 @Preview(showBackground = true)

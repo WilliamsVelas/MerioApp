@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,12 +20,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Cached
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,8 +33,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -81,11 +78,9 @@ class MainActivity : ComponentActivity() {
 fun MyTopAndBotomAppBar() {
     val navigationController = rememberNavController()
 
-    var amountConvertion = remember {
-        mutableStateOf<Float>(0.0f)
-    }
 
-    Log.i("siii", "${amountConvertion.value}")
+
+    Log.i("siii", "${GlobalVar.amountConvertion}")
 
     val context = LocalContext.current.applicationContext
 
@@ -109,7 +104,6 @@ fun MyTopAndBotomAppBar() {
                     ),
                     actions = {
                         Spacer(modifier = Modifier.size(8.dp))
-
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -149,34 +143,23 @@ fun MyTopAndBotomAppBar() {
                                 )
                             }
 
-                            Spacer(modifier = Modifier.weight(0.5f))
+                            Spacer(modifier = Modifier.weight(0.3f))
                             Card(
+                                border = BorderStroke(1.dp, Success_Color),
                                 modifier = Modifier
-                                    .height(50.dp)
-                                    .width(100.dp),
-                                shape = MaterialTheme.shapes.large,
-                                border = BorderStroke(2.dp, Success_Color),
-                                elevation = CardDefaults.cardElevation(
-                                    defaultElevation = 6.dp
-                                ),
+                                    .height(30.dp)
+                                    .width(90.dp),
                             ) {
-
-                                Row(Modifier.fillMaxSize().background(Success_Color)) {
-
-                                    TextField(
-                                        modifier = Modifier.fillMaxSize(),
-                                        label = { Text(text = "") },
-                                        value = amountConvertion.value.toString(),
-                                        singleLine = true,
-                                        onValueChange = {newValue ->
-                                            amountConvertion.value = newValue.toFloatOrNull() ?: 0.0f
-                                        },
-                                        colors = TextFieldDefaults.textFieldColors(
-                                            containerColor = Background_Card,
-                                            focusedIndicatorColor = Success_Color,
-                                            focusedLabelColor = Color.Black
+                                Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+                                    IconButton(onClick = { /*TODO*/ }) {
+                                        Icon(
+                                            modifier = Modifier.size(20.dp),
+                                            imageVector = Icons.Default.Cached,
+                                            tint = Success_Color,
+                                            contentDescription = ""
                                         )
-                                    )
+                                    }
+                                    Text(text = "${GlobalVar.amountConvertion}")
                                 }
                             }
                         }
