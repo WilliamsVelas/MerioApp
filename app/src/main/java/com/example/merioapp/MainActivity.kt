@@ -150,7 +150,7 @@ fun MyTopAndBotomAppBar() {
                                     .height(30.dp)
                                     .width(90.dp),
                             ) {
-                                Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+                                Row(Modifier.fillMaxSize().background(Background_Card), verticalAlignment = Alignment.CenterVertically) {
                                     IconButton(onClick = { /*TODO*/ }) {
                                         Icon(
                                             modifier = Modifier.size(20.dp),

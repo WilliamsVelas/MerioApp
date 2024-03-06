@@ -19,6 +19,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -72,7 +75,7 @@ fun ProductScreen(navHostController: NavHostController) {
                 Card(
                     modifier = Modifier
                         .width(200.dp)
-                        .height(100.dp),
+                        .height(90.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = Background_Card,
                     ),
@@ -92,6 +95,32 @@ fun ProductScreen(navHostController: NavHostController) {
                     ) {
 
                     }
+
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(
+                            text = "Productos",
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = "000",
+                            style = TextStyle(
+                                color = Secondary_Yellow,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+
+
+                    }
                 }
             }
             Box(
@@ -102,7 +131,7 @@ fun ProductScreen(navHostController: NavHostController) {
             ) {
                 Card(
                     Modifier
-                        .height(700.dp)
+                        .height(710.dp)
                         .fillMaxWidth(),
                     colors = CardDefaults.cardColors(
                         containerColor = Background_Card,
@@ -110,83 +139,110 @@ fun ProductScreen(navHostController: NavHostController) {
                     shape = RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp),
                 ) {
 
-                }
-            }
-        }
-    }
-}
+                    LazyColumn(modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp)) {
+                        items(8) {
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp)
+                                    .padding(8.dp),
+                                shape = MaterialTheme.shapes.large,
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Principal_Item,
+                                    contentColor = Color.Black
+                                ),
+                                elevation = CardDefaults.cardElevation(
+                                    defaultElevation = 8.dp
+                                ),
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Spacer(modifier = Modifier.height(16.dp))
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ProductScreen2() {
+                                    Column(modifier = Modifier.padding(16.dp)) {
+                                        Text(
+                                            text = "Jabon Azul", style = TextStyle(
+                                                color = Color.Black,
+                                                fontSize = 20.sp,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "Proveedor  Rio", style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "Precio   1.5", style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "Serial  0000012", style = TextStyle(
+                                                fontSize = 14.sp,
+                                            )
+                                        )
+                                    }
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+                                    Spacer(modifier = Modifier.weight(1f))
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .background(Principal_Yellow)
-        ) {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 26.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Card(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(100.dp),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                ) {
-                    Card(
+                                    Column(modifier = Modifier.padding(12.dp)) {
+                                        Icon(
+                                            modifier = Modifier.size(80.dp),
+                                            tint = Color.LightGray,
+                                            imageVector = Icons.Default.Image,
+                                            contentDescription = "imageicon"
+                                        )
+                                        Icon(
+                                            modifier = Modifier.size(24.dp),
+                                            tint = Danger_Color,
+                                            imageVector = Icons.Outlined.Delete,
+                                            contentDescription = "trash"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Button(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(10.dp),
-                        shape = RoundedCornerShape(0.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Secondary_Yellow,
-                            contentColor = Color.Black
+                            .align(Alignment.CenterHorizontally)
+                            .padding(2.dp),
+                        onClick = {
+
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White,
+                            containerColor = Success_Color,
+                            disabledContentColor = Color.White
                         ),
                     ) {
-
+                        Text(
+                            text = "Agregar", style = TextStyle(
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
                     }
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.BottomEnd
-
-            ) {
-                Card(
-                    Modifier
-                        .height(700.dp)
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp),
-                ) {
 
                 }
             }
-
-
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     MerioAppTheme {
-        ProductScreen2()
     }
 }
