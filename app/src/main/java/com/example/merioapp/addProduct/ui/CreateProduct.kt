@@ -8,7 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.example.merioapp.ui.theme.MerioAppTheme
 import com.example.merioapp.ui.theme.Principal_Yellow
 
 @Composable
@@ -23,5 +25,13 @@ fun CreateProduct(){
         ) {
             Text(text = "CreateProduct", fontSize = 30.sp, color = Principal_Yellow)
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    MerioAppTheme {
+//        MyTopAndBotomAppBar()
     }
 }
