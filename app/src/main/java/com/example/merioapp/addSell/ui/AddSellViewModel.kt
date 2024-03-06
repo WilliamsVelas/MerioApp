@@ -31,8 +31,8 @@ class AddSellViewModel @Inject constructor(private val useCase: SellUseCase) : V
                 provider = provider,
                 name_product = name_product,
                 serial_product = serial_product,
-                price_product = price_product.toInt(),
-                profit_product = profit_product.toInt()
+                price_product = price_product.toFloat(),
+                profit_product = profit_product.toFloat()
             )
         )
     }

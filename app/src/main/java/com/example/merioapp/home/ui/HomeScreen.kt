@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.merioapp.model.Routes
+import com.example.merioapp.ui.domain.entity.Sell
 import com.example.merioapp.ui.theme.MerioAppTheme
 import com.example.merioapp.ui.theme.*
 
@@ -61,6 +62,8 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val sells = viewModel.sells.collectAsState(initial = emptyList())
+
+    val totalProfit = getTotalPorfit(sells.value)
 
     val selected = remember {
         mutableStateOf(Icons.Default.Sell)
@@ -187,7 +190,7 @@ fun HomeScreen(
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "000",
+                                text = "${totalProfit}",
                                 style = TextStyle(
                                     color = Success_Color,
                                     fontSize = 18.sp,
@@ -200,7 +203,12 @@ fun HomeScreen(
                 }
             }
             if (sells.value.isEmpty()) {
-                Box(modifier = Modifier.fillMaxWidth().height(200.dp).align(Alignment.CenterHorizontally) ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -273,7 +281,7 @@ fun HomeScreen(
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 Text(
-                                    text = "${it.price_product} $", style = TextStyle(
+                                    text = "${it.profit_product} $", style = TextStyle(
                                         color = Success_Color,
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold
@@ -299,16 +307,23 @@ fun HomeScreen(
                     disabledContentColor = Color.White
                 ),
             ) {
-                Text(text = "Nueva venta", style = TextStyle(
-                    fontWeight = FontWeight.Bold
-                ))
+                Text(
+                    text = "Nueva venta", style = TextStyle(
+                        fontWeight = FontWeight.Bold
+                    )
+                )
             }
         }
     }
-
-
 }
 
+fun getTotalPorfit(sell: List<Sell>): Float {
+    var totalProfit = 0.0f
+    sell.forEach { sell ->
+        totalProfit += sell.profit_product
+    }
+    return totalProfit
+}
 
 @Preview(showBackground = true)
 @Composable

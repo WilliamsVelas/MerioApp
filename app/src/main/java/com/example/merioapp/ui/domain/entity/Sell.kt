@@ -12,6 +12,6 @@ data class Sell(
     val provider: String = "",
     val name_product: String = "",
     val serial_product: String = "",
-    val price_product: Int = 0,
-    val profit_product: Int = 0,
+    val price_product: Float = 0.0f,
+    val profit_product: Float = 0.0f,
 )

@@ -199,6 +199,33 @@ fun CreateSell(
                 thickness = 1.dp,
                 modifier = Modifier.fillMaxWidth()
             )
+
+            Spacer(modifier = Modifier.height(4.dp))
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(70.dp)
+                    .padding(8.dp),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+            ) {
+                TextField(
+                    modifier = Modifier.fillMaxSize(),
+                    label = { Text(text = "Nombre") },
+                    value = viewModel.name_product,
+                    singleLine = true,
+                    onValueChange = {
+                        viewModel.name_product = it
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Background_Card,
+                        focusedIndicatorColor = Success_Color,
+                        focusedLabelColor = Color.Black
+                    )
+                )
+            }
+
             Spacer(modifier = Modifier.height(4.dp))
             Card(
                 modifier = Modifier
@@ -216,33 +243,6 @@ fun CreateSell(
                     singleLine = true,
                     onValueChange = {
                         viewModel.provider = it
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        containerColor = Background_Card,
-                        focusedIndicatorColor = Success_Color,
-                        focusedLabelColor = Color.Black
-                    )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp)
-                    .padding(8.dp),
-                elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ),
-            ) {
-                TextField(
-                    modifier = Modifier.fillMaxSize(),
-                    label = { Text(text = "Nombre") },
-                    value = viewModel.name_product,
-                    singleLine = true,
-                    onValueChange = {
-                        viewModel.name_product = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -350,9 +350,11 @@ fun CreateSell(
                         disabledContentColor = Color.White
                     ),
                 ) {
-                    Text(text = "Borrar",  style = TextStyle(
-                        fontWeight = FontWeight.Bold
-                    ))
+                    Text(
+                        text = "Borrar", style = TextStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
@@ -369,9 +371,11 @@ fun CreateSell(
                         disabledContentColor = Color.White
                     ),
                 ) {
-                    Text(text = "Guardar",  style = TextStyle(
-                        fontWeight = FontWeight.Bold
-                    ))
+                    Text(
+                        text = "Guardar", style = TextStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
                 }
 
             }
