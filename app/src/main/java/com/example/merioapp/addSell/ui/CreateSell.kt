@@ -1,5 +1,6 @@
 package com.example.merioapp.addSell.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +23,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -33,6 +38,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.merioapp.ui.domain.entity.Client
 import com.example.merioapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,6 +59,16 @@ fun CreateSell(
     navHostController: NavHostController,
     viewModel: AddSellViewModel = hiltViewModel()
 ) {
+
+    val products = viewModel.products.collectAsState(initial = emptyList())
+
+    val clients = viewModel.clients.collectAsState(initial = emptyList())
+    var selectedClient by remember { mutableStateOf<Client?>(null) }
+
+    var expandedProducts by remember { mutableStateOf(false) }
+    var expandedClients by remember { mutableStateOf(false) }
+
+
     Scaffold(
         containerColor = Background_Screen,
         topBar = {
@@ -81,6 +99,7 @@ fun CreateSell(
                 .padding(it)
                 .verticalScroll(rememberScrollState())
         ) {
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,6 +112,36 @@ fun CreateSell(
                         fontWeight = FontWeight.Bold
                     )
                 )
+            }
+
+            ExposedDropdownMenuBox(
+                expanded = expandedClients,
+                onExpandedChange = { expandedClients = !expandedClients }) {
+
+                TextField(
+                    modifier = Modifier.menuAnchor(),
+                    value = selectedClient?.name_client ?: "",
+                    onValueChange = {},
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedClients) },
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expandedClients,
+                    onDismissRequest = { expandedClients = false }) {
+                    clients.value.forEach { client ->
+
+                        DropdownMenuItem(
+                            text = { Text("${client.name_client}") },
+                            onClick = {
+                                selectedClient = client
+                                viewModel.client_id = client.id
+                                viewModel.name_client = client.name_client
+                                viewModel.description = client.description
+                                viewModel.identification_client = client.identification_client
+                                expandedClients = false
+                            })
+                    }
+                }
             }
 
             Divider(
@@ -113,10 +162,9 @@ fun CreateSell(
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Nombre") },
-                    value = viewModel.name_client,
+                    value = selectedClient?.name_client ?: "",
                     singleLine = true,
                     onValueChange = {
-                        viewModel.name_client = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -138,10 +186,9 @@ fun CreateSell(
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Cedula/RIF") },
-                    value = viewModel.identification_client,
+                    value = selectedClient?.identification_client ?: "",
                     singleLine = true,
                     onValueChange = {
-                        viewModel.identification_client = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -165,9 +212,8 @@ fun CreateSell(
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Descripcion") },
-                    value = viewModel.description,
+                    value = selectedClient?.description ?: "",
                     onValueChange = {
-                        viewModel.description = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -216,7 +262,6 @@ fun CreateSell(
                     value = viewModel.name_product,
                     singleLine = true,
                     onValueChange = {
-                        viewModel.name_product = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -242,7 +287,6 @@ fun CreateSell(
                     value = viewModel.provider,
                     singleLine = true,
                     onValueChange = {
-                        viewModel.provider = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -269,7 +313,6 @@ fun CreateSell(
                     value = viewModel.serial_product,
                     singleLine = true,
                     onValueChange = {
-                        viewModel.serial_product = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -296,7 +339,6 @@ fun CreateSell(
                     value = viewModel.price_product.toString(),
                     singleLine = true,
                     onValueChange = {
-                        viewModel.price_product = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -323,7 +365,6 @@ fun CreateSell(
                         label = { Text(text = "Ganancia") },
                         value = viewModel.profit_product.toString(),
                         onValueChange = {
-                            viewModel.profit_product = it
                         },
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Background_Card,
@@ -379,16 +420,8 @@ fun CreateSell(
                 }
 
             }
-
         }
     }
-
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MerioAppTheme {
 
-    }
-}

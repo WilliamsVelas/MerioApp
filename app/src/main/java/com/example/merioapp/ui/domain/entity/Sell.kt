@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "sell")
 data class Sell(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val client_id: Int = 0,
+    val product_id: Int = 0,
     val name_client: String = "",
     val identification_client: String = "",
     val description: String = "",

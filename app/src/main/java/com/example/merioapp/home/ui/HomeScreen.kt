@@ -1,5 +1,6 @@
 package com.example.merioapp.home.ui
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -65,6 +66,8 @@ fun HomeScreen(
     val sells = viewModel.sells.collectAsState(initial = emptyList())
 
     val totalProfit = getTotalPorfit(sells.value)
+
+    Log.i("SELLS","${sells}" )
 
     val isDolar = false
 

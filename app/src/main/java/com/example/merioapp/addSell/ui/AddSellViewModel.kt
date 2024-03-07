@@ -6,13 +6,19 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.merioapp.ui.domain.entity.Sell
+import com.example.merioapp.ui.domain.usecase.client.ClientUseCase
+import com.example.merioapp.ui.domain.usecase.product.ProductUseCase
 import com.example.merioapp.ui.domain.usecase.sell.SellUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddSellViewModel @Inject constructor(private val useCase: SellUseCase) : ViewModel() {
+class AddSellViewModel @Inject constructor(
+    private val useCase: SellUseCase,
+    private val useCaseClient: ClientUseCase,
+    private val useCaseProduct: ProductUseCase
+) : ViewModel() {
     var name_client by mutableStateOf("")
     var identification_client by mutableStateOf("")
     var description by mutableStateOf("")
@@ -21,10 +27,19 @@ class AddSellViewModel @Inject constructor(private val useCase: SellUseCase) : V
     var serial_product by mutableStateOf("")
     var price_product by mutableStateOf("")
     var profit_product by mutableStateOf("")
+    var client_id by mutableStateOf(0)
+    var product_id by mutableStateOf(0)
+
+    var clients = useCaseClient.getClients()
+
+    var products = useCaseProduct.getProducts()
+
 
     fun addSell() = viewModelScope.launch {
         useCase.insertSell(
             Sell(
+                client_id = client_id,
+                product_id = product_id,
                 name_client = name_client,
                 identification_client = identification_client,
                 description = description,
