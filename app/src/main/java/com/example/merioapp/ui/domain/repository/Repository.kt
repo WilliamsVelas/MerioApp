@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.merioapp.ui.domain.entity.Client
+import com.example.merioapp.ui.domain.entity.Product
 import com.example.merioapp.ui.domain.entity.Sell
 import kotlinx.coroutines.flow.Flow
 
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 interface Repository {
 
     //SELLS
-
     @Insert
     suspend fun insertSell(sell: Sell)
 
@@ -48,5 +48,15 @@ interface Repository {
     suspend fun getByIdClient(id: Int): Client
 
     //PRODUCTS
+    @Insert
+    suspend fun inserProduct(product: Product)
 
+    @Update
+    suspend fun updateProduct(product: Product)
+
+    @Delete
+    suspend fun deteleProduct(product: Product)
+
+    @Query("select * from product")
+    fun getProduct(): Flow<List<Product>>
 }

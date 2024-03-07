@@ -217,7 +217,7 @@ fun ProductScreen(navHostController: NavHostController) {
                             .align(Alignment.CenterHorizontally)
                             .padding(2.dp),
                         onClick = {
-
+                                navHostController.navigate(Routes.CreateProductScreen.route)
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(

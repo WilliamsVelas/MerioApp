@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.merioapp.addClient.ui.CreateClient
+import com.example.merioapp.addProduct.ui.CreateProduct
 import com.example.merioapp.addSell.ui.CreateSell
 import com.example.merioapp.clientProfile.ui.ClientProfile
 import com.example.merioapp.clients.ui.ClientScreen
@@ -29,7 +30,7 @@ fun AppNavigation(navHostController: NavHostController) {
         composable(Routes.ClientProfileScreen.route){ ClientProfile(navHostController)}
 
         //PRODUCT
-
         composable(Routes.ProductScreen.route) { ProductScreen(navHostController) }
+        composable(Routes.CreateProductScreen.route){CreateProduct(navHostController)}
     }
 }
