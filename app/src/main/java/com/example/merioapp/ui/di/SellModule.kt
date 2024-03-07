@@ -9,6 +9,11 @@ import com.example.merioapp.ui.domain.usecase.client.DeleteClient
 import com.example.merioapp.ui.domain.usecase.client.GetClients
 import com.example.merioapp.ui.domain.usecase.client.InsertClient
 import com.example.merioapp.ui.domain.usecase.client.UpdateClient
+import com.example.merioapp.ui.domain.usecase.product.DeleteProduct
+import com.example.merioapp.ui.domain.usecase.product.GetProducts
+import com.example.merioapp.ui.domain.usecase.product.InsertProduct
+import com.example.merioapp.ui.domain.usecase.product.ProductUseCase
+import com.example.merioapp.ui.domain.usecase.product.UpdateProduct
 import com.example.merioapp.ui.domain.usecase.sell.DeleteSell
 import com.example.merioapp.ui.domain.usecase.sell.GetSells
 import com.example.merioapp.ui.domain.usecase.sell.InsertSell
@@ -48,5 +53,13 @@ object SellModule {
         insertClient = InsertClient(repositoryImp),
         updateClient = UpdateClient(repositoryImp),
         deleteClient = DeleteClient(repositoryImp)
+    )
+
+    @Provides
+    fun providerProductUseCase(repositoryImp: RepositoryImp) = ProductUseCase(
+        getProducts = GetProducts(repositoryImp),
+        insertProduct = InsertProduct(repositoryImp),
+        updateProduct = UpdateProduct(repositoryImp),
+        deleteProduct = DeleteProduct(repositoryImp)
     )
 }

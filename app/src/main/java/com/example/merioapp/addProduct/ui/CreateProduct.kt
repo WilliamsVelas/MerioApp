@@ -41,12 +41,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.merioapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateProduct(navHostController: NavHostController) {
+fun CreateProduct(
+    navHostController: NavHostController,
+    viewModel: AddProductViewModel = hiltViewModel()
+) {
     Scaffold(containerColor = Background_Screen,
         topBar = {
             TopAppBar(
@@ -127,10 +131,10 @@ fun CreateProduct(navHostController: NavHostController) {
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Nombre") },
-                    value = "",
+                    value = viewModel.name_product,
                     singleLine = true,
                     onValueChange = {
-
+                        viewModel.name_product = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -154,10 +158,10 @@ fun CreateProduct(navHostController: NavHostController) {
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Proveedor") },
-                    value = "",
+                    value = viewModel.provider,
                     singleLine = true,
                     onValueChange = {
-
+                        viewModel.provider = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -181,10 +185,10 @@ fun CreateProduct(navHostController: NavHostController) {
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Serial") },
-                    value = "",
+                    value = viewModel.serial_product,
                     singleLine = true,
                     onValueChange = {
-
+                        viewModel.serial_product = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -208,10 +212,10 @@ fun CreateProduct(navHostController: NavHostController) {
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Precio") },
-                    value = "",
+                    value = viewModel.price_product,
                     singleLine = true,
                     onValueChange = {
-
+                        viewModel.price_product = it
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -221,35 +225,6 @@ fun CreateProduct(navHostController: NavHostController) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Card(
-                    modifier = Modifier
-                        .width(250.dp)
-                        .height(70.dp)
-                        .padding(8.dp),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                ) {
-                    TextField(
-                        modifier = Modifier.fillMaxHeight(),
-                        label = { Text(text = "Ganancia") },
-                        value = "",
-                        onValueChange = {
-
-                        },
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Background_Card,
-                            focusedIndicatorColor = Success_Color,
-                            focusedLabelColor = Color.Black
-                        )
-                    )
-                }
-
-
-            }
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(Modifier.align(Alignment.CenterHorizontally)) {
@@ -273,6 +248,7 @@ fun CreateProduct(navHostController: NavHostController) {
 
                 Button(
                     onClick = {
+                        viewModel.addProduct()
                         navHostController.popBackStack()
                     },
                     modifier = Modifier

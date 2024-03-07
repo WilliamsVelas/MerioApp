@@ -1,6 +1,7 @@
 package com.example.merioapp.ui.data
 
 import com.example.merioapp.ui.domain.entity.Client
+import com.example.merioapp.ui.domain.entity.Product
 import com.example.merioapp.ui.domain.entity.Sell
 import com.example.merioapp.ui.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
@@ -30,4 +31,13 @@ class RepositoryImp @Inject constructor(private val dao: Repository) : Repositor
     override suspend fun getByIdClient(id: Int): Client {
         TODO("Not yet implemented")
     }
+
+    //PRODUCTS
+
+    override suspend fun insertProduct(product: Product) = dao.insertProduct(product = product)
+
+    override suspend fun updateProduct(product: Product) = dao.updateProduct(product = product)
+    override suspend fun deteleProduct(product: Product) = dao.deteleProduct(product = product)
+
+    override fun getProduct(): Flow<List<Product>> = dao.getProduct()
 }

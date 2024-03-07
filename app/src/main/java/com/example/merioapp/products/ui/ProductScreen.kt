@@ -34,6 +34,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.merioapp.GlobalVar
 import com.example.merioapp.home.ui.getConvertProfit
@@ -52,8 +54,13 @@ import com.example.merioapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductScreen(navHostController: NavHostController) {
+fun ProductScreen(
+    navHostController: NavHostController,
+    viewModel: ProductScreenViewModel = hiltViewModel()
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    val products = viewModel.products.collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = Modifier
@@ -110,7 +117,7 @@ fun ProductScreen(navHostController: NavHostController) {
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = "000",
+                            text = "${products.value.size}",
                             style = TextStyle(
                                 color = Secondary_Yellow,
                                 fontSize = 18.sp,
@@ -138,86 +145,118 @@ fun ProductScreen(navHostController: NavHostController) {
                     ),
                     shape = RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp),
                 ) {
-
-                    LazyColumn(modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)) {
-                        items(8) {
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(150.dp)
-                                    .padding(8.dp),
-                                shape = MaterialTheme.shapes.large,
-                                colors = CardDefaults.cardColors(
-                                    containerColor = Principal_Item,
-                                    contentColor = Color.Black
-                                ),
-                                elevation = CardDefaults.cardElevation(
-                                    defaultElevation = 8.dp
-                                ),
+                    if (products.value.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .align(Alignment.CenterHorizontally)
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Row(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalAlignment = Alignment.CenterVertically,
+                                Spacer(modifier = Modifier.width(16.dp))
+                                Icon(
+                                    imageVector = Icons.Outlined.PersonOff,
+                                    contentDescription = "ClientIcon",
+                                    tint = Danger_Color,
+                                    modifier = Modifier.size(28.dp),
+                                )
+
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(
+                                    text = "No hay Products que mostrar", style = TextStyle(
+                                        color = Color.Black,
+                                        fontSize = 24.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(8.dp)
+                        ) {
+                            items(products.value) {
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(150.dp)
+                                        .padding(8.dp),
+                                    shape = MaterialTheme.shapes.large,
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Principal_Item,
+                                        contentColor = Color.Black
+                                    ),
+                                    elevation = CardDefaults.cardElevation(
+                                        defaultElevation = 8.dp
+                                    ),
                                 ) {
-                                    Spacer(modifier = Modifier.height(16.dp))
+                                    Row(
+                                        modifier = Modifier.fillMaxSize(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Spacer(modifier = Modifier.height(16.dp))
 
-                                    Column(modifier = Modifier.padding(16.dp)) {
-                                        Text(
-                                            text = "Jabon Azul", style = TextStyle(
-                                                color = Color.Black,
-                                                fontSize = 20.sp,
-                                                fontWeight = FontWeight.Bold
+                                        Column(modifier = Modifier.padding(16.dp)) {
+                                            Text(
+                                                text = it.name_product, style = TextStyle(
+                                                    color = Color.Black,
+                                                    fontSize = 20.sp,
+                                                    fontWeight = FontWeight.Bold
+                                                )
                                             )
-                                        )
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Text(
-                                            text = "Proveedor  Rio", style = TextStyle(
-                                                fontSize = 14.sp,
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Text(
+                                                text = "Proveedor:  ${it.provider}", style = TextStyle(
+                                                    fontSize = 14.sp,
+                                                )
                                             )
-                                        )
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Text(
-                                            text = "Precio   1.5", style = TextStyle(
-                                                fontSize = 14.sp,
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Text(
+                                                text = "Precio:  ${it.price_product}", style = TextStyle(
+                                                    fontSize = 14.sp,
+                                                )
                                             )
-                                        )
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                        Text(
-                                            text = "Serial  0000012", style = TextStyle(
-                                                fontSize = 14.sp,
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            Text(
+                                                text = "Serial:  ${it.serial_product}", style = TextStyle(
+                                                    fontSize = 14.sp,
+                                                )
                                             )
-                                        )
-                                    }
+                                        }
 
-                                    Spacer(modifier = Modifier.weight(1f))
+                                        Spacer(modifier = Modifier.weight(1f))
 
-                                    Column(modifier = Modifier.padding(12.dp)) {
-                                        Icon(
-                                            modifier = Modifier.size(80.dp),
-                                            tint = Color.LightGray,
-                                            imageVector = Icons.Default.Image,
-                                            contentDescription = "imageicon"
-                                        )
-                                        Icon(
-                                            modifier = Modifier.size(24.dp),
-                                            tint = Danger_Color,
-                                            imageVector = Icons.Outlined.Delete,
-                                            contentDescription = "trash"
-                                        )
+                                        Column(modifier = Modifier.padding(12.dp)) {
+                                            Icon(
+                                                modifier = Modifier.size(80.dp),
+                                                tint = Color.LightGray,
+                                                imageVector = Icons.Default.Image,
+                                                contentDescription = "imageicon"
+                                            )
+                                            Icon(
+                                                modifier = Modifier.size(24.dp),
+                                                tint = Danger_Color,
+                                                imageVector = Icons.Outlined.Delete,
+                                                contentDescription = "trash"
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-
                     Button(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(2.dp),
                         onClick = {
-                                navHostController.navigate(Routes.CreateProductScreen.route)
+                            navHostController.navigate(Routes.CreateProductScreen.route)
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(

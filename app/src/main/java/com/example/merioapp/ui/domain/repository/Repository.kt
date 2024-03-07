@@ -49,7 +49,7 @@ interface Repository {
 
     //PRODUCTS
     @Insert
-    suspend fun inserProduct(product: Product)
+    suspend fun insertProduct(product: Product)
 
     @Update
     suspend fun updateProduct(product: Product)
