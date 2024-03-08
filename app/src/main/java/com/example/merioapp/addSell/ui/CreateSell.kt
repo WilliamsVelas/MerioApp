@@ -11,12 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,6 +32,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -51,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.merioapp.model.Routes
 import com.example.merioapp.ui.domain.entity.Client
 import com.example.merioapp.ui.domain.entity.Product
 import com.example.merioapp.ui.theme.*
@@ -119,11 +123,20 @@ fun CreateSell(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth(),
-                contentAlignment = Alignment.Center
+
             ) {
+
+                IconButton(onClick = { navHostController.navigate(Routes.CreateClientScreen.route) }) {
+                    Icon(
+                        modifier = Modifier.size(40.dp),
+                        imageVector = Icons.Default.Add,
+                        contentDescription = ""
+                    )
+                }
+
 
                 Card(
                     modifier = Modifier
@@ -536,4 +549,5 @@ fun CreateSell(
             }
         }
     }
+
 }
