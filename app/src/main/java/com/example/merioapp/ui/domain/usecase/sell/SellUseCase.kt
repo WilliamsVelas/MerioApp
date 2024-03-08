@@ -4,6 +4,7 @@ data class SellUseCase(
     val insertSell: InsertSell,
     val deleteSell: DeleteSell,
     val updateSell: UpdateSell,
-    val getSells: GetSells
+    val getSells: GetSells,
+    val getSellsByClientId: GetSellsByClientId
 )
 

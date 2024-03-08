@@ -67,10 +67,6 @@ fun HomeScreen(
 
     val totalProfit = getTotalPorfit(sells.value)
 
-    Log.i("SELLS","${sells}" )
-
-    val isDolar = false
-
     val selected = remember {
         mutableStateOf(Icons.Default.Sell)
     }
@@ -161,6 +157,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(160.dp)
                             .padding(12.dp),
+                        border = BorderStroke(1.dp, Success_Color),
                         shape = MaterialTheme.shapes.large,
                         colors = CardDefaults.cardColors(
                             containerColor = Principal_Item,
@@ -288,7 +285,7 @@ fun HomeScreen(
 
                                 Text(
                                     text = "${
-                                        if (isDolar){
+                                        if (GlobalVar.isDolar){
                                             getConvertProfit(
                                                 it.profit_product,
                                                 GlobalVar.amountConvertion

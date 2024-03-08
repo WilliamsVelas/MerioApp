@@ -16,6 +16,7 @@ import com.example.merioapp.ui.domain.usecase.product.ProductUseCase
 import com.example.merioapp.ui.domain.usecase.product.UpdateProduct
 import com.example.merioapp.ui.domain.usecase.sell.DeleteSell
 import com.example.merioapp.ui.domain.usecase.sell.GetSells
+import com.example.merioapp.ui.domain.usecase.sell.GetSellsByClientId
 import com.example.merioapp.ui.domain.usecase.sell.InsertSell
 import com.example.merioapp.ui.domain.usecase.sell.SellUseCase
 import com.example.merioapp.ui.domain.usecase.sell.UpdateSell
@@ -44,7 +45,8 @@ object SellModule {
         getSells = GetSells(repositoryImp),
         updateSell = UpdateSell(repositoryImp),
         insertSell = InsertSell(repositoryImp),
-        deleteSell = DeleteSell(repositoryImp)
+        deleteSell = DeleteSell(repositoryImp),
+        getSellsByClientId = GetSellsByClientId(repositoryImp)
     )
 
     @Provides

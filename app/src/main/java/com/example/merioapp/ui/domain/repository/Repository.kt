@@ -29,6 +29,9 @@ interface Repository {
     @Query("select * from sell where id =:id")
     suspend fun getByIdSell(id: Int): Sell
 
+    @Query("SELECT * FROM sell WHERE client_id =:client_id")
+    fun getSellsByClientId(client_id: Int): List<Sell>
+
     //CLIENTS
 
     @Insert

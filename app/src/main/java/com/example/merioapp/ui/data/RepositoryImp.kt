@@ -20,6 +20,8 @@ class RepositoryImp @Inject constructor(private val dao: Repository) : Repositor
         TODO("Not yet implemented")
     }
 
+    override  fun getSellsByClientId(client_id: Int): List<Sell> = dao.getSellsByClientId(client_id)
+
     //CLIENT
 
     override suspend fun insertClient(client: Client) = dao.insertClient(client = client)

@@ -45,12 +45,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.merioapp.ui.domain.entity.Client
+import com.example.merioapp.ui.domain.entity.Product
 import com.example.merioapp.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +63,7 @@ fun CreateSell(
 ) {
 
     val products = viewModel.products.collectAsState(initial = emptyList())
+    var selectedProduct by remember { mutableStateOf<Product?>(null) }
 
     val clients = viewModel.clients.collectAsState(initial = emptyList())
     var selectedClient by remember { mutableStateOf<Client?>(null) }
@@ -114,35 +117,69 @@ fun CreateSell(
                 )
             }
 
-            ExposedDropdownMenuBox(
-                expanded = expandedClients,
-                onExpandedChange = { expandedClients = !expandedClients }) {
+            Spacer(modifier = Modifier.height(8.dp))
 
-                TextField(
-                    modifier = Modifier.menuAnchor(),
-                    value = selectedClient?.name_client ?: "",
-                    onValueChange = {},
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedClients) },
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
 
-                ExposedDropdownMenu(
-                    expanded = expandedClients,
-                    onDismissRequest = { expandedClients = false }) {
-                    clients.value.forEach { client ->
+                Card(
+                    modifier = Modifier
+                        .height(70.dp)
+                        .padding(8.dp),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                ) {
 
-                        DropdownMenuItem(
-                            text = { Text("${client.name_client}") },
-                            onClick = {
-                                selectedClient = client
-                                viewModel.client_id = client.id
-                                viewModel.name_client = client.name_client
-                                viewModel.description = client.description
-                                viewModel.identification_client = client.identification_client
-                                expandedClients = false
-                            })
+                    ExposedDropdownMenuBox(
+                        expanded = expandedClients,
+                        onExpandedChange = { expandedClients = !expandedClients }) {
+
+                        TextField(
+                            modifier = Modifier.menuAnchor(),
+                            readOnly = true,
+                            placeholder = { Text("Seleccione un Cliente") },
+                            value = selectedClient?.name_client ?: "",
+                            onValueChange = {},
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedClients) },
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expandedClients,
+                            onDismissRequest = { expandedClients = false }) {
+                            if (clients.value.isEmpty()) {
+                                DropdownMenuItem(
+                                    text = { Text("No hay clientes disponibles") },
+                                    onClick = {
+
+                                    })
+                            } else {
+                                clients.value.forEach { client ->
+
+                                    DropdownMenuItem(
+                                        text = { Text("${client.name_client}  ${client.identification_client}") },
+                                        onClick = {
+                                            selectedClient = client
+                                            viewModel.client_id = client.id
+                                            viewModel.name_client = client.name_client
+                                            viewModel.description = client.description
+                                            viewModel.identification_client =
+                                                client.identification_client
+                                            expandedClients = false
+                                        })
+                                }
+                            }
+                        }
                     }
                 }
+
+
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Divider(
                 color = Background_Card,
@@ -162,8 +199,9 @@ fun CreateSell(
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Nombre") },
-                    value = selectedClient?.name_client ?: "",
+                    value = viewModel.name_client,
                     singleLine = true,
+                    readOnly = true,
                     onValueChange = {
                     },
                     colors = TextFieldDefaults.textFieldColors(
@@ -188,6 +226,7 @@ fun CreateSell(
                     label = { Text(text = "Cedula/RIF") },
                     value = selectedClient?.identification_client ?: "",
                     singleLine = true,
+                    readOnly = true,
                     onValueChange = {
                     },
                     colors = TextFieldDefaults.textFieldColors(
@@ -215,6 +254,7 @@ fun CreateSell(
                     value = selectedClient?.description ?: "",
                     onValueChange = {
                     },
+                    readOnly = true,
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
                         focusedIndicatorColor = Success_Color,
@@ -239,6 +279,71 @@ fun CreateSell(
                 )
             }
 
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+
+                Card(
+                    modifier = Modifier
+                        .height(70.dp)
+                        .padding(8.dp),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                ) {
+
+                    ExposedDropdownMenuBox(
+                        expanded = expandedProducts,
+                        onExpandedChange = { expandedProducts = !expandedProducts }) {
+
+                        TextField(
+                            modifier = Modifier.menuAnchor(),
+                            readOnly = true,
+                            placeholder = { Text("Seleccione un Producto") },
+                            value = selectedProduct?.name_product ?: "",
+                            onValueChange = {},
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedProducts) },
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expandedProducts,
+                            onDismissRequest = { expandedProducts = false }) {
+                            if (products.value.isEmpty()) {
+                                DropdownMenuItem(
+                                    text = { Text("No hay Productos disponibles") },
+                                    onClick = {
+                                    })
+                            } else {
+                                products.value.forEach { product ->
+
+                                    DropdownMenuItem(
+                                        text = { Text("${product.name_product}") },
+                                        onClick = {
+                                            selectedProduct = product
+                                            viewModel.product_id = product.id
+                                            viewModel.name_product = product.name_product
+                                            viewModel.provider = product.provider
+                                            viewModel.serial_product = product.serial_product
+                                            viewModel.price_product =
+                                                product.price_product.toString()
+                                            expandedProducts = false
+                                        })
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+
 
             Divider(
                 color = Background_Card,
@@ -261,7 +366,9 @@ fun CreateSell(
                     label = { Text(text = "Nombre") },
                     value = viewModel.name_product,
                     singleLine = true,
+                    readOnly = true,
                     onValueChange = {
+
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         containerColor = Background_Card,
@@ -286,6 +393,7 @@ fun CreateSell(
                     label = { Text(text = "Proveedor") },
                     value = viewModel.provider,
                     singleLine = true,
+                    readOnly = true,
                     onValueChange = {
                     },
                     colors = TextFieldDefaults.textFieldColors(
@@ -312,6 +420,7 @@ fun CreateSell(
                     label = { Text(text = "Serial") },
                     value = viewModel.serial_product,
                     singleLine = true,
+                    readOnly = true,
                     onValueChange = {
                     },
                     colors = TextFieldDefaults.textFieldColors(
@@ -336,8 +445,9 @@ fun CreateSell(
                 TextField(
                     modifier = Modifier.fillMaxSize(),
                     label = { Text(text = "Precio") },
-                    value = viewModel.price_product.toString(),
+                    value = viewModel.price_product,
                     singleLine = true,
+                    readOnly = true,
                     onValueChange = {
                     },
                     colors = TextFieldDefaults.textFieldColors(
@@ -363,9 +473,11 @@ fun CreateSell(
                     TextField(
                         modifier = Modifier.fillMaxHeight(),
                         label = { Text(text = "Ganancia") },
-                        value = viewModel.profit_product.toString(),
+                        value = viewModel.profit_product,
                         onValueChange = {
+                            viewModel.profit_product = it
                         },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Background_Card,
                             focusedIndicatorColor = Success_Color,
@@ -423,5 +535,3 @@ fun CreateSell(
         }
     }
 }
-
-
