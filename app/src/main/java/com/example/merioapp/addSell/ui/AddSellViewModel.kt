@@ -20,6 +20,8 @@ class AddSellViewModel @Inject constructor(
     private val useCaseProduct: ProductUseCase
 ) : ViewModel() {
     var name_client by mutableStateOf("")
+    var client_email by mutableStateOf("")
+    var client_phone by mutableStateOf("")
     var identification_client by mutableStateOf("")
     var description by mutableStateOf("")
     var provider by mutableStateOf("")
@@ -41,6 +43,8 @@ class AddSellViewModel @Inject constructor(
                 client_id = client_id,
                 product_id = product_id,
                 name_client = name_client,
+                client_email = client_email,
+                client_phone = client_phone,
                 identification_client = identification_client,
                 description = description,
                 provider = provider,

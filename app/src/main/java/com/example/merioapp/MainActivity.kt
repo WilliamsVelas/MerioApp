@@ -11,13 +11,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Cached
@@ -26,6 +30,7 @@ import androidx.compose.material.icons.filled.Inventory
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +38,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -44,9 +51,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.merioapp.model.Routes
@@ -78,7 +88,11 @@ class MainActivity : ComponentActivity() {
 fun MyTopAndBotomAppBar() {
     val navigationController = rememberNavController()
 
+    var showDialog by remember { mutableStateOf(false) }
 
+    if (showDialog) {
+        MinimalDialog(onDismissRequest = { showDialog = false })
+    }
 
     Log.i("siii", "${GlobalVar.amountConvertion}")
 
@@ -150,8 +164,13 @@ fun MyTopAndBotomAppBar() {
                                     .height(30.dp)
                                     .width(90.dp),
                             ) {
-                                Row(Modifier.fillMaxSize().background(Background_Card), verticalAlignment = Alignment.CenterVertically) {
-                                    IconButton(onClick = { /*TODO*/ }) {
+                                Row(
+                                    Modifier
+                                        .fillMaxSize()
+                                        .background(Background_Card),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    IconButton(onClick = { showDialog = true }) {
                                         Icon(
                                             modifier = Modifier.size(20.dp),
                                             imageVector = Icons.Default.Cached,
@@ -269,6 +288,51 @@ fun MyTopAndBotomAppBar() {
         )
 
         else -> AppNavigation(navigationController)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MinimalDialog(onDismissRequest: () -> Unit) {
+    var amountValue by remember { mutableStateOf(GlobalVar.amountConvertion.toString()) }
+
+    Dialog(onDismissRequest = { onDismissRequest() }) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Card(
+                    modifier = Modifier
+                        .height(70.dp)
+                        .padding(8.dp),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 6.dp
+                    ),
+                ) {
+                    TextField(
+                        modifier = Modifier.fillMaxHeight(),
+                        label = { Text(text = "Tasa Dolar") },
+                        value = amountValue,
+                        onValueChange = {
+                            amountValue = it
+                            if (it.isNotEmpty()) {
+                                GlobalVar.amountConvertion = amountValue.toFloat()
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Background_Card,
+                            focusedIndicatorColor = Success_Color,
+                            focusedLabelColor = Color.Black
+                        )
+                    )
+                }
+            }
+        }
     }
 }
 

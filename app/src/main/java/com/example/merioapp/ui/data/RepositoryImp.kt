@@ -20,7 +20,7 @@ class RepositoryImp @Inject constructor(private val dao: Repository) : Repositor
         TODO("Not yet implemented")
     }
 
-    override  fun getSellsByClientId(client_id: Int): List<Sell> = dao.getSellsByClientId(client_id)
+    override  fun getSellsByClientId(id: Int):  Flow<List<Sell>> = dao.getSellsByClientId(id)
 
     //CLIENT
 
@@ -30,9 +30,7 @@ class RepositoryImp @Inject constructor(private val dao: Repository) : Repositor
 
     override fun getClients(): Flow<List<Client>> = dao.getClients()
 
-    override suspend fun getByIdClient(id: Int): Client {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getByIdClient(id: Int): Client = dao.getByIdClient(id)
 
     //PRODUCTS
 

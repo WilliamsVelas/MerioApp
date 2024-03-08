@@ -168,6 +168,8 @@ fun CreateSell(
                                             viewModel.description = client.description
                                             viewModel.identification_client =
                                                 client.identification_client
+                                            viewModel.client_email = client.email
+                                            viewModel.client_phone = client.phone_number
                                             expandedClients = false
                                         })
                                 }

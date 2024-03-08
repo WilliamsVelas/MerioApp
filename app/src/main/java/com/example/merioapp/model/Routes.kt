@@ -13,6 +13,8 @@ sealed class Routes(val route: String) {
     data object CreateSellScreen:Routes("createSellScreen")
 
     //??
-    data object ClientProfileScreen:Routes("clientProfileScreen")
+    data object ClientProfileScreen : Routes("clientProfileScreen/{id}") {
+        fun getById(id: Int) = "clientProfileScreen/$id"
+    }
     data object MyTopAndBottomBar:Routes("myTopAndBottomBar")
 }

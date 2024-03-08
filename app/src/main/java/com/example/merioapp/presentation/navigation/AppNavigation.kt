@@ -21,16 +21,23 @@ fun AppNavigation(navHostController: NavHostController) {
     NavHost(navController = navHostController, startDestination = Routes.HomeScreen.route) {
         //SELLS
         composable(Routes.HomeScreen.route) { HomeScreen(navHostController) }
-        composable(Routes.CreateSellScreen.route) {CreateSell(navHostController)}
+        composable(Routes.CreateSellScreen.route) { CreateSell(navHostController) }
 
         //CLIENT
 
         composable(Routes.ClientScreen.route) { ClientScreen(navHostController) }
-        composable(Routes.CreateClientScreen.route){ CreateClient(navHostController) }
-        composable(Routes.ClientProfileScreen.route){ ClientProfile(navHostController)}
+        composable(Routes.CreateClientScreen.route) { CreateClient(navHostController) }
+        composable(route = Routes.ClientProfileScreen.route, arguments = listOf(
+            navArgument("id") {
+                type = NavType.IntType
+            }
+        )) {
+            ClientProfile(navHostController)
+        }
+
 
         //PRODUCT
         composable(Routes.ProductScreen.route) { ProductScreen(navHostController) }
-        composable(Routes.CreateProductScreen.route){CreateProduct(navHostController)}
+        composable(Routes.CreateProductScreen.route) { CreateProduct(navHostController) }
     }
 }

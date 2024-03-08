@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
@@ -28,25 +29,34 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.merioapp.GlobalVar
-import com.example.merioapp.home.ui.getConvertProfit
-import com.example.merioapp.ui.theme.*
+import com.example.merioapp.ui.theme.Background_Card
+import com.example.merioapp.ui.theme.Background_Screen
+import com.example.merioapp.ui.theme.Principal_Item
+import com.example.merioapp.ui.theme.Principal_Yellow2
+import com.example.merioapp.ui.theme.Secondary_Light_Yellow
+import com.example.merioapp.ui.theme.Success_Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfileViewModel = hiltViewModel()) {
+fun ClientProfile(
+    navHostController: NavHostController,
+    viewModel: ClientProfileViewModel = hiltViewModel()
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    val sellsByClientId = viewModel.sellByIdClient.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -102,7 +112,7 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
                                 .padding(8.dp)
                         ) {
                             Text(
-                                text = "jose Antonio de la Rosa",
+                                text = viewModel.name_client,
                                 style = TextStyle(
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.SemiBold
@@ -112,7 +122,7 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Text(
-                                text = "V-00.000.000",
+                                text = viewModel.identification_client,
                                 style = TextStyle(
                                     color = Color.Gray,
                                     fontSize = 16.sp,
@@ -123,7 +133,18 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Text(
-                                text = "0400.0000000",
+                                text = viewModel.email,
+                                style = TextStyle(
+                                    color = Color.Gray,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Text(
+                                text = viewModel.phone_number,
                                 style = TextStyle(
                                     color = Color.Gray,
                                     fontSize = 16.sp,
@@ -194,7 +215,7 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
                     )
 
                     Text(
-                        text = "${"0"}", style = TextStyle(
+                        text = "${sellsByClientId.value.size}", style = TextStyle(
                             color = Success_Color,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
@@ -205,7 +226,7 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
             }
 
             LazyColumn(modifier = Modifier.weight(1f)) {
-                items(1) {
+                items(sellsByClientId.value) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -236,14 +257,14 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
 
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
-                                    text = "Name Client", style = TextStyle(
+                                    text = it.name_product, style = TextStyle(
                                         color = Color.Black,
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold
                                     )
                                 )
                                 Text(
-                                    text = "Proveedor", style = TextStyle(
+                                    text = it.provider, style = TextStyle(
                                         fontSize = 12.sp,
                                     )
                                 )
@@ -254,9 +275,9 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
                             Text(
                                 text = "${
                                     if (GlobalVar.isDolar) {
-                                        "200"
+                                        it.profit_product
                                     } else {
-                                        "2001"
+                                        it.profit_product
                                     }
                                 } $", style = TextStyle(
                                     color = Success_Color,
@@ -278,7 +299,11 @@ fun ClientProfile(navHostController: NavHostController, viewModel: ClientProfile
                 IconButton(onClick = {
                     navHostController.popBackStack()
                 }) {
-                    Icon(modifier = Modifier.size(50.dp),imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    Icon(
+                        modifier = Modifier.size(50.dp),
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
             }
 

@@ -10,6 +10,8 @@ data class Sell(
     val product_id: Int = 0,
     val name_client: String = "",
     val identification_client: String = "",
+    val client_email: String = "",
+    val client_phone: String = "",
     val description: String = "",
     val provider: String = "",
     val name_product: String = "",

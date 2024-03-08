@@ -233,7 +233,7 @@ fun ClientScreen(navHostController: NavHostController, viewModel: ClientsScreenV
                                     .fillMaxHeight()
                                     .background(Btn_Secondary)
                                     .width(45.dp),
-                                    onClick = { navHostController.navigate(Routes.ClientProfileScreen.route) }) {
+                                    onClick = { navHostController.navigate(Routes.ClientProfileScreen.getById(it.id)) }) {
                                     Icon(
                                         imageVector = Icons.Outlined.ArrowForwardIos,
                                         contentDescription = "ClientIcon",

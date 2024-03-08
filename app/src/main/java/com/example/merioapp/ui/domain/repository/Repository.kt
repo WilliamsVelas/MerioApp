@@ -30,7 +30,7 @@ interface Repository {
     suspend fun getByIdSell(id: Int): Sell
 
     @Query("SELECT * FROM sell WHERE client_id =:client_id")
-    fun getSellsByClientId(client_id: Int): List<Sell>
+    fun getSellsByClientId(client_id: Int): Flow<List<Sell>>
 
     //CLIENTS
 
