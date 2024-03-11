@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.CurrencyExchange
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material.icons.outlined.PersonSearch
@@ -32,6 +33,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -67,7 +69,7 @@ fun HomeScreen(
 
     val sells = viewModel.sells.collectAsState(initial = emptyList())
 
-    val totalProfit = getTotalPorfit(sells.value)
+    val totalProfit = getTotalProfit(sells.value)
 
     val selected = remember {
         mutableStateOf(Icons.Default.Sell)
@@ -287,15 +289,12 @@ fun HomeScreen(
 
                                 Text(
                                     text = "${
-                                        if (GlobalVar.isDolar){
-                                            getConvertProfit(
-                                                it.profit_product,
-                                                GlobalVar.amountConvertion
-                                            )
-                                        }else {
-                                            it.profit_product
-                                        }
-                                    } $", style = TextStyle(
+                                        viewModel.calcProfitByType(
+                                            it.profit_product,
+                                            it.profit_type
+                                        )
+                                    }" + " ${if (GlobalVar.isDolar) " $" else " Bs"}",
+                                    style = TextStyle(
                                         color = Success_Color,
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.Bold
@@ -307,43 +306,50 @@ fun HomeScreen(
                     }
                 }
             }
-            Button(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(2.dp),
-                onClick = {
-                    navHostController.navigate(Routes.CreateSellScreen.route)
-                },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    containerColor = Success_Color,
-                    disabledContentColor = Color.White
-                ),
-            ) {
-                Text(
-                    text = "Nueva venta", style = TextStyle(
-                        fontWeight = FontWeight.Bold
+
+            Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    modifier = Modifier
+                        .padding(2.dp),
+                    onClick = {
+                        navHostController.navigate(Routes.CreateSellScreen.route)
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.White,
+                        containerColor = Success_Color,
+                        disabledContentColor = Color.White
+                    ),
+                ) {
+                    Text(
+                        text = "Nueva venta", style = TextStyle(
+                            fontWeight = FontWeight.Bold
+                        )
                     )
-                )
+                }
+
+                SmallFloatingActionButton(
+                    onClick = { GlobalVar.isDolar = !GlobalVar.isDolar },
+                    containerColor = Background_Screen,
+                    contentColor = Success_Color
+                ) {
+                    Icon(Icons.Default.CurrencyExchange, "Small floating action button.")
+                }
             }
+
         }
     }
 }
 
-fun getTotalPorfit(sell: List<Sell>): Float {
+fun getTotalProfit(sell: List<Sell>): Float {
     var totalProfit = 0.0f
     sell.forEach { sell ->
         totalProfit += sell.profit_product
     }
+
+    totalProfit = String.format("%.2f", totalProfit).toFloat()
+
     return totalProfit
-}
-
-fun getConvertProfit(value: Float, float: Float): Float {
-
-    var convertedProfit = value * float
-    return convertedProfit
-
 }
 
 @Preview(showBackground = true)

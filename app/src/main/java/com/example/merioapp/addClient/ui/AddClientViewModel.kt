@@ -24,7 +24,6 @@ class AddClientViewModel @Inject constructor(private val useCase: ClientUseCase)
 
     //PREFIX OPTIONS FOR identification_client INPUT
     var selectedPrefix by mutableStateOf("")
-    var displayText by mutableStateOf(selectedPrefix + identification_client )
     val idenditificationPrefix = listOf("V-", "J-", "E-")
 
 
@@ -38,5 +37,13 @@ class AddClientViewModel @Inject constructor(private val useCase: ClientUseCase)
                 phone_number = phone_number
             )
         )
+    }
+
+    fun cleanInputs() = viewModelScope.launch {
+        name_client = ""
+        email = ""
+        phone_number = ""
+        description = ""
+        identification_client = ""
     }
 }

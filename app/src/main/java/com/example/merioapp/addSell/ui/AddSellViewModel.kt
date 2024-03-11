@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.merioapp.GlobalVar
 import com.example.merioapp.ui.domain.entity.Sell
 import com.example.merioapp.ui.domain.usecase.client.ClientUseCase
 import com.example.merioapp.ui.domain.usecase.product.ProductUseCase
@@ -31,13 +32,21 @@ class AddSellViewModel @Inject constructor(
     var profit_product by mutableStateOf("")
     var client_id by mutableStateOf(0)
     var product_id by mutableStateOf(0)
+    var profit_type by mutableStateOf("")
 
     var clients = useCaseClient.getClients()
 
     var products = useCaseProduct.getProducts()
 
+    var expandedMenu by mutableStateOf(false)
+
+    //SELECTOR OF PROFIT TYPE
+    var profitTypeSelected by mutableStateOf("")
+    val profitTypeList = listOf("$", "Bs.")
+
 
     fun addSell() = viewModelScope.launch {
+        selectProfitType()
         useCase.insertSell(
             Sell(
                 client_id = client_id,
@@ -51,8 +60,17 @@ class AddSellViewModel @Inject constructor(
                 name_product = name_product,
                 serial_product = serial_product,
                 price_product = price_product.toFloat(),
-                profit_product = profit_product.toFloat()
+                profit_product = profit_product.toFloat(),
+                profit_type = profitTypeSelected
             )
         )
+    }
+
+    fun selectProfitType() = viewModelScope.launch {
+        if (profitTypeSelected == "Usd.") {
+            GlobalVar.isDolar = true
+        } else {
+            GlobalVar.isDolar = false
+        }
     }
 }

@@ -229,7 +229,7 @@ fun CreateProduct(
 
             Row(Modifier.align(Alignment.CenterHorizontally)) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { viewModel.cleanInputs() },
                     modifier = Modifier
                         .padding(2.dp),
                     shape = RoundedCornerShape(8.dp),

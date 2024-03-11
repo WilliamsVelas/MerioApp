@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -482,7 +483,12 @@ fun CreateSell(
                 ) {
                     TextField(
                         modifier = Modifier.fillMaxHeight(),
-                        label = { Text(text = "Ganancia") },
+                        label = { Text(text = "Ganancia " + " : ${viewModel.profitTypeSelected}") },
+                        trailingIcon = {
+                            IconButton(onClick = { viewModel.expandedMenu = true }) {
+                                Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
+                            }
+                        },
                         value = viewModel.profit_product,
                         onValueChange = {
                             viewModel.profit_product = it
@@ -494,6 +500,18 @@ fun CreateSell(
                             focusedLabelColor = Color.Black
                         )
                     )
+
+                    DropdownMenu(
+                        expanded = viewModel.expandedMenu,
+                        onDismissRequest = { viewModel.expandedMenu = false }
+                    ) {
+                        viewModel.profitTypeList.forEach { type ->
+                            DropdownMenuItem(onClick = {
+                                viewModel.profitTypeSelected = type
+                                viewModel.expandedMenu = false
+                            }, text = { Text(text = type) })
+                        }
+                    }
                 }
             }
 
@@ -504,7 +522,6 @@ fun CreateSell(
                     modifier = Modifier
                         .padding(2.dp),
                     onClick = {
-
                     },
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
