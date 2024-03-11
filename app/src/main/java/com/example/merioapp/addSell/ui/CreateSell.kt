@@ -183,9 +183,7 @@ fun CreateSell(
                     }
                 }
             }
-
-
-
+             
             Spacer(modifier = Modifier.height(8.dp))
 
             Divider(
