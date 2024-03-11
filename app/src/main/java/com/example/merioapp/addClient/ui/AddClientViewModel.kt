@@ -20,11 +20,19 @@ class AddClientViewModel @Inject constructor(private val useCase: ClientUseCase)
     var email by mutableStateOf("")
     var phone_number by mutableStateOf("")
 
+    var expandedMenu by mutableStateOf(false)
+
+    //PREFIX OPTIONS FOR identification_client INPUT
+    var selectedPrefix by mutableStateOf("")
+    var displayText by mutableStateOf(selectedPrefix + identification_client )
+    val idenditificationPrefix = listOf("V-", "J-", "E-")
+
+
     fun addClient() = viewModelScope.launch {
         useCase.insertClient(
             Client(
                 name_client = name_client,
-                identification_client = identification_client,
+                identification_client = selectedPrefix + identification_client,
                 description = description,
                 email = email,
                 phone_number = phone_number

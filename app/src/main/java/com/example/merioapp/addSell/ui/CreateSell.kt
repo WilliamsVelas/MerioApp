@@ -32,6 +32,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -123,21 +124,11 @@ fun CreateSell(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth(),
-
+                contentAlignment = Alignment.Center
             ) {
-
-                IconButton(onClick = { navHostController.navigate(Routes.CreateClientScreen.route) }) {
-                    Icon(
-                        modifier = Modifier.size(40.dp),
-                        imageVector = Icons.Default.Add,
-                        contentDescription = ""
-                    )
-                }
-
-
                 Card(
                     modifier = Modifier
                         .height(70.dp)
@@ -146,7 +137,6 @@ fun CreateSell(
                         defaultElevation = 6.dp
                     ),
                 ) {
-
                     ExposedDropdownMenuBox(
                         expanded = expandedClients,
                         onExpandedChange = { expandedClients = !expandedClients }) {
@@ -158,41 +148,43 @@ fun CreateSell(
                             value = selectedClient?.name_client ?: "",
                             onValueChange = {},
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedClients) },
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Principal_Item,
+                            )
                         )
 
                         ExposedDropdownMenu(
                             expanded = expandedClients,
                             onDismissRequest = { expandedClients = false }) {
-                            if (clients.value.isEmpty()) {
+                            DropdownMenuItem(
+                                text = { Text("Agregar Cliente") },
+                                onClick = {
+                                    expandedClients = false
+                                    navHostController.navigate(Routes.CreateClientScreen.route)
+                                })
+                            clients.value.forEach { client ->
+
                                 DropdownMenuItem(
-                                    text = { Text("No hay clientes disponibles") },
+                                    text = { Text("${client.name_client}  ${client.identification_client}") },
                                     onClick = {
-
+                                        selectedClient = client
+                                        viewModel.client_id = client.id
+                                        viewModel.name_client = client.name_client
+                                        viewModel.description = client.description
+                                        viewModel.identification_client =
+                                            client.identification_client
+                                        viewModel.client_email = client.email
+                                        viewModel.client_phone = client.phone_number
+                                        expandedClients = false
                                     })
-                            } else {
-                                clients.value.forEach { client ->
-
-                                    DropdownMenuItem(
-                                        text = { Text("${client.name_client}  ${client.identification_client}") },
-                                        onClick = {
-                                            selectedClient = client
-                                            viewModel.client_id = client.id
-                                            viewModel.name_client = client.name_client
-                                            viewModel.description = client.description
-                                            viewModel.identification_client =
-                                                client.identification_client
-                                            viewModel.client_email = client.email
-                                            viewModel.client_phone = client.phone_number
-                                            expandedClients = false
-                                        })
-                                }
                             }
+
                         }
                     }
                 }
-
-
             }
+
+
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -322,33 +314,36 @@ fun CreateSell(
                             value = selectedProduct?.name_product ?: "",
                             onValueChange = {},
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedProducts) },
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Principal_Item,
+                            )
                         )
 
                         ExposedDropdownMenu(
                             expanded = expandedProducts,
                             onDismissRequest = { expandedProducts = false }) {
-                            if (products.value.isEmpty()) {
-                                DropdownMenuItem(
-                                    text = { Text("No hay Productos disponibles") },
-                                    onClick = {
-                                    })
-                            } else {
-                                products.value.forEach { product ->
+                            DropdownMenuItem(
+                                text = { Text("Agregar Producto") },
+                                onClick = {
+                                    expandedProducts = false
+                                    navHostController.navigate(Routes.CreateProductScreen.route)
+                                })
+                            products.value.forEach { product ->
 
-                                    DropdownMenuItem(
-                                        text = { Text("${product.name_product}") },
-                                        onClick = {
-                                            selectedProduct = product
-                                            viewModel.product_id = product.id
-                                            viewModel.name_product = product.name_product
-                                            viewModel.provider = product.provider
-                                            viewModel.serial_product = product.serial_product
-                                            viewModel.price_product =
-                                                product.price_product.toString()
-                                            expandedProducts = false
-                                        })
-                                }
+                                DropdownMenuItem(
+                                    text = { Text("${product.name_product}") },
+                                    onClick = {
+                                        selectedProduct = product
+                                        viewModel.product_id = product.id
+                                        viewModel.name_product = product.name_product
+                                        viewModel.provider = product.provider
+                                        viewModel.serial_product = product.serial_product
+                                        viewModel.price_product =
+                                            product.price_product.toString()
+                                        expandedProducts = false
+                                    })
                             }
+
                         }
                     }
                 }
