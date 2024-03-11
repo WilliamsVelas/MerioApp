@@ -268,11 +268,7 @@ fun CreateClient(
                         modifier = Modifier
                             .padding(2.dp),
                         onClick = {
-                            viewModel.name_client = ""
-                            viewModel.email = ""
-                            viewModel.phone_number = ""
-                            viewModel.description = ""
-                            viewModel.identification_client = ""
+                            viewModel.cleanInputs()
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(

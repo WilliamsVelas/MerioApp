@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.merioapp.GlobalVar
-import com.example.merioapp.home.ui.getConvertProfit
 import com.example.merioapp.model.Routes
 import com.example.merioapp.ui.theme.MerioAppTheme
 import com.example.merioapp.ui.theme.*

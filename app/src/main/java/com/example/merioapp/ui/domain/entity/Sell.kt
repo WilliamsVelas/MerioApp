@@ -18,4 +18,5 @@ data class Sell(
     val serial_product: String = "",
     val price_product: Float = 0.0f,
     val profit_product: Float = 0.0f,
+    val profit_type: String = ""
 )

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddProductViewModel @Inject constructor(private val useCase: ProductUseCase): ViewModel(){
+class AddProductViewModel @Inject constructor(private val useCase: ProductUseCase) : ViewModel() {
     var provider by mutableStateOf("")
     var name_product by mutableStateOf("")
     var serial_product by mutableStateOf("")
@@ -25,5 +25,12 @@ class AddProductViewModel @Inject constructor(private val useCase: ProductUseCas
                 price_product = price_product.toFloat(),
             )
         )
+    }
+
+    fun cleanInputs() = viewModelScope.launch {
+        provider = ""
+        name_product = ""
+        serial_product = ""
+        price_product = ""
     }
 }

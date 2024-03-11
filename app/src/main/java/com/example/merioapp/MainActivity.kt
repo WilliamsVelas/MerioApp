@@ -21,12 +21,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Cached
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Inventory
+import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Sell
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -90,8 +92,12 @@ fun MyTopAndBotomAppBar() {
 
     var showDialog by remember { mutableStateOf(false) }
 
-    if (showDialog) {
-        MinimalDialog(onDismissRequest = { showDialog = false })
+    if (GlobalVar.showDialogConvertion) {
+        MinimalDialog(onDismissRequest = { GlobalVar.showDialogConvertion = false })
+    }
+
+    if (GlobalVar.amountConvertion == 0.0f) {
+        GlobalVar.showDialogConvertion = true
     }
 
     Log.i("siii", "${GlobalVar.amountConvertion}")
@@ -100,8 +106,6 @@ fun MyTopAndBotomAppBar() {
 
     val currentDestination =
         navigationController.currentBackStackEntryAsState().value?.destination?.route
-
-    Log.i("navBar", "vabar${currentDestination}")
 
     val selected = remember {
         mutableStateOf(Icons.Default.Sell)
@@ -162,7 +166,7 @@ fun MyTopAndBotomAppBar() {
                                 border = BorderStroke(1.dp, Success_Color),
                                 modifier = Modifier
                                     .height(30.dp)
-                                    .width(90.dp),
+                                    .width(100.dp),
                             ) {
                                 Row(
                                     Modifier
@@ -170,7 +174,7 @@ fun MyTopAndBotomAppBar() {
                                         .background(Background_Card),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    IconButton(onClick = { showDialog = true }) {
+                                    IconButton(onClick = { GlobalVar.showDialogConvertion = true }) {
                                         Icon(
                                             modifier = Modifier.size(20.dp),
                                             imageVector = Icons.Default.Cached,
@@ -300,36 +304,63 @@ fun MinimalDialog(onDismissRequest: () -> Unit) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
+                .height(150.dp)
                 .padding(16.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Card(
-                    modifier = Modifier
-                        .height(70.dp)
-                        .padding(8.dp),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                ) {
-                    TextField(
-                        modifier = Modifier.fillMaxHeight(),
-                        label = { Text(text = "Tasa Dolar") },
-                        value = amountValue,
-                        onValueChange = {
-                            amountValue = it
-                            if (it.isNotEmpty()) {
-                                GlobalVar.amountConvertion = amountValue.toFloat()
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Background_Card,
-                            focusedIndicatorColor = Success_Color,
-                            focusedLabelColor = Color.Black
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Principal_Yellow),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "Por favor coloque la tasa de cambio",
+                                modifier = Modifier.padding(8.dp),
+                                style = TextStyle(
+                                    fontSize = 14.sp,
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                            
+                            Icon(tint = Color.White ,imageVector = Icons.Default.MonetizationOn, contentDescription = "cash")
+                        }
+
+                    Card(
+                        modifier = Modifier
+                            .height(70.dp)
+                            .padding(8.dp),
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 6.dp
+                        ),
+                    ) {
+                        TextField(
+                            modifier = Modifier.fillMaxHeight(),
+                            label = { Text(text = "Tasa") },
+                            value = amountValue,
+                            onValueChange = {
+                                amountValue = it
+                                if (it.isNotEmpty()) {
+                                    GlobalVar.amountConvertion = amountValue.toFloat()
+                                }
+                            },
+                            keyboardActions = KeyboardActions(
+
+                                onNext = {
+                                    GlobalVar.showDialogConvertion = false
+                                }
+                            ),
+                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Background_Card,
+                                focusedIndicatorColor = Success_Color,
+                                focusedLabelColor = Color.Black
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
