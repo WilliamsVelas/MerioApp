@@ -9,4 +9,6 @@ object GlobalVar {
     var isDolar by mutableStateOf(false)
 
     var showDialogConvertion by mutableStateOf(false)
+
+    var makeCalcProfit by mutableStateOf(false)
 }

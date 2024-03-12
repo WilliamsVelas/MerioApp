@@ -69,11 +69,11 @@ fun HomeScreen(
 
     val sells = viewModel.sells.collectAsState(initial = emptyList())
 
-    val totalProfit = getTotalProfit(sells.value)
+    Log.i("ENTRO", "${GlobalVar.makeCalcProfit}")
 
-    val selected = remember {
-        mutableStateOf(Icons.Default.Sell)
-    }
+    Log.i("LIST OF PROFIT", "${viewModel.resultList}")
+
+    Log.i("LIST OF PROFIT", "${viewModel.totalProfit}")
 
     Scaffold(
         modifier = Modifier
@@ -197,7 +197,7 @@ fun HomeScreen(
                             )
                             Spacer(modifier = Modifier.weight(1f))
                             Text(
-                                text = "${totalProfit}",
+                                text = "${viewModel.totalProfit}",
                                 style = TextStyle(
                                     color = Success_Color,
                                     fontSize = 18.sp,
@@ -289,10 +289,12 @@ fun HomeScreen(
 
                                 Text(
                                     text = "${
-                                        viewModel.calcProfitByType(
-                                            it.profit_product,
-                                            it.profit_type
-                                        )
+                                        if (GlobalVar.makeCalcProfit == true){
+                                            viewModel.calcProfitByType(
+                                                it.profit_product,
+                                                it.profit_type
+                                            )
+                                        }else {""}
                                     }" + " ${if (GlobalVar.isDolar) " $" else " Bs"}",
                                     style = TextStyle(
                                         color = Success_Color,
@@ -304,6 +306,7 @@ fun HomeScreen(
                             }
                         }
                     }
+
                 }
             }
 
@@ -341,16 +344,16 @@ fun HomeScreen(
     }
 }
 
-fun getTotalProfit(sell: List<Sell>): Float {
-    var totalProfit = 0.0f
-    sell.forEach { sell ->
-        totalProfit += sell.profit_product
-    }
-
-    totalProfit = String.format("%.2f", totalProfit).toFloat()
-
-    return totalProfit
-}
+//fun getTotalProfit(sell: List<Sell>): Float {
+//    var totalProfit = 0.0f
+//    sell.forEach { sell ->
+//        totalProfit += sell.profit_product
+//    }
+//
+//    totalProfit = String.format("%.2f", totalProfit).toFloat()
+//
+//    return totalProfit
+//}
 
 @Preview(showBackground = true)
 @Composable

@@ -1,5 +1,6 @@
 package com.example.merioapp.home.ui
 
+import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.merioapp.GlobalVar
@@ -16,35 +17,32 @@ class HomeScreenViewModel @Inject constructor(private val useCase: SellUseCase) 
 
     var profitCalculated = 0.0f
 
+    val resultList = mutableListOf<Float>()
+
     var totalProfit = 0.0f
 
     fun calcProfitByType(profit: Float, profitType: String): Float {
-        when (GlobalVar.isDolar) {
-            true -> when (profitType) {
-                "$" -> {
-                    profitCalculated = profit;
-                }
+        if (GlobalVar.isDolar == true) {
+            if (profitType == "$") profitCalculated = profit;
 
-                "Bs." -> {
-                    profitCalculated =
-                        profit / GlobalVar.amountConvertion
-                }
-            }
+            if (profitType == "Bs.") profitCalculated = profit / GlobalVar.amountConvertion
 
-            false -> when (profitType) {
-                "Bs." -> {
-                    profitCalculated = profit
-                }
+        } else if (GlobalVar.isDolar == false) {
+            if (profitType == "Bs.") profitCalculated = profit
 
-                "$" -> {
-                    profitCalculated =
-                        profit * GlobalVar.amountConvertion
-                }
-            }
+            if (profitType == "$") profitCalculated = profit * GlobalVar.amountConvertion
         }
 
         profitCalculated = String.format("%.2f", profitCalculated).toFloat()
 
+        if (profitCalculated != 0.0f) {
+            resultList.add(profitCalculated)
+        }
+
+        totalProfit = resultList.sum()
+
         return profitCalculated
     }
+
+
 }

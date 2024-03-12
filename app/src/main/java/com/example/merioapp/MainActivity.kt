@@ -90,17 +90,15 @@ class MainActivity : ComponentActivity() {
 fun MyTopAndBotomAppBar() {
     val navigationController = rememberNavController()
 
-    var showDialog by remember { mutableStateOf(false) }
-
     if (GlobalVar.showDialogConvertion) {
-        MinimalDialog(onDismissRequest = { GlobalVar.showDialogConvertion = false })
+        MinimalDialog(onDismissRequest = {
+            GlobalVar.showDialogConvertion = false; GlobalVar.makeCalcProfit = true
+        })
     }
 
     if (GlobalVar.amountConvertion == 0.0f) {
         GlobalVar.showDialogConvertion = true
     }
-
-    Log.i("siii", "${GlobalVar.amountConvertion}")
 
     val context = LocalContext.current.applicationContext
 
@@ -174,7 +172,9 @@ fun MyTopAndBotomAppBar() {
                                         .background(Background_Card),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    IconButton(onClick = { GlobalVar.showDialogConvertion = true }) {
+                                    IconButton(onClick = {
+                                        GlobalVar.showDialogConvertion = true
+                                    }) {
                                         Icon(
                                             modifier = Modifier.size(20.dp),
                                             imageVector = Icons.Default.Cached,
@@ -299,6 +299,7 @@ fun MyTopAndBotomAppBar() {
 @Composable
 fun MinimalDialog(onDismissRequest: () -> Unit) {
     var amountValue by remember { mutableStateOf(GlobalVar.amountConvertion.toString()) }
+    GlobalVar.makeCalcProfit = false
 
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -315,19 +316,23 @@ fun MinimalDialog(onDismissRequest: () -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = "Por favor coloque la tasa de cambio",
-                                modifier = Modifier.padding(8.dp),
-                                style = TextStyle(
-                                    fontSize = 14.sp,
-                                    color = Color.Black,
-                                    fontWeight = FontWeight.Bold
-                                )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = "Por favor coloque la tasa de cambio",
+                            modifier = Modifier.padding(8.dp),
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold
                             )
-                            
-                            Icon(tint = Color.White ,imageVector = Icons.Default.MonetizationOn, contentDescription = "cash")
-                        }
+                        )
+
+                        Icon(
+                            tint = Color.White,
+                            imageVector = Icons.Default.MonetizationOn,
+                            contentDescription = "cash"
+                        )
+                    }
 
                     Card(
                         modifier = Modifier
@@ -347,12 +352,6 @@ fun MinimalDialog(onDismissRequest: () -> Unit) {
                                     GlobalVar.amountConvertion = amountValue.toFloat()
                                 }
                             },
-                            keyboardActions = KeyboardActions(
-
-                                onNext = {
-                                    GlobalVar.showDialogConvertion = false
-                                }
-                            ),
                             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = Background_Card,
@@ -364,13 +363,5 @@ fun MinimalDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MerioAppTheme {
-//        MyTopAndBotomAppBar()
     }
 }
